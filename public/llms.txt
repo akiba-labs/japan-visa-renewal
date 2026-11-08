@@ -1,0 +1,57 @@
+# Japan Visa Renewal Window Check
+
+> Free, unofficial date calculator for renewing a period of stay (在留期間更新, "visa renewal") or a residence card in Japan. If the current period of stay is 6 months or longer, the extension application window opens 3 months before the expiry date and closes on the expiry date (shorter periods: any time before expiry; earlier only for unavoidable reasons by consultation). Apply by the expiry date and the special period (特例期間) lets you stay until the decision or 2 months after expiry, whichever is first. Fee by period granted (applications received from 2026-10-01): counter ¥10,000–¥75,000, online ¥10,000–¥65,000 + ¥330/¥550. Permanent residents (16+) and HSP (ii) renew the card's validity free from 3 months before card expiry; old cards ending at the 16th birthday from 6 months before; new-format cards issued from 2026-06-14 last until the 10th birthday after issue (5th if under 18). Rules as of 2026-11-08. Educational, not advice; not affiliated with the Immigration Services Agency of Japan.
+
+Site: https://japan-visa-renewal.vercel.app
+
+## Key facts (official sources below)
+- Window (在留期間更新許可申請, ISA 16-3): 満了日以前; 6か月以上の在留期間 → 満了の3か月前から. Early exceptions: study abroad, long posting/business trip, childbirth or home-country birth, hospital treatment, family applying together, foreign visa needing 6+ months left.
+- Special period (特例期間, art. 20(6)/21(4)): applied by expiry, no decision → stay until decision or the end of the day 2 months after expiry (earlier wins). Late applications get no special period. Online applications get no 申請中 note on the card.
+- Fees (from 2026-10-01, by period granted): counter ≤3m ¥10,000 · ≤6m ¥18,000 · <1y ¥25,000 · 1y ¥33,000 · 1–3y ¥48,000 · 3–5y ¥64,000 · 5y+ ¥75,000; online ¥10,000 / ¥15,000 / ¥21,000 / ¥27,000 / ¥42,000 / ¥56,000 / ¥65,000 + ¥330 (¥550 for 3y+). Received by 2026-09-30 → ¥6,000. Standard processing 2 weeks–1 month.
+- Card validity renewal (在留カードの有効期間の更新申請): PR 16+ and HSP (ii): 3 months before card expiry → expiry; free; usually same day. Old cards (issued ≤2026-06-13) ending at the 16th birthday: from 6 months before.
+- 特定在留カード (card + My Number, from 2026-06-14): optional, counter only, ~10 days longer; My Number validity ends at the original expiry, so change it at the city office if still pending.
+- Not covered: whether ISA grants the renewal or which period, change of status, permanent-residence applications (see Japan PR Guideline Check), re-entry while pending (see Japan Re-entry Deadline Check).
+
+## API (free, no key, CORS open)
+
+### GET
+GET https://japan-visa-renewal.vercel.app/api/check?expiryDate=2027-03-20&currentPeriodMonths=12&holder=fixed&today=2026-11-08
+→ verdict "too_early", windowOpens "2026-12-20", lastDay "2027-03-20", specialPeriodEnd "2027-05-20", fee.totalJPY 33000, deadlines, actions, warnings, sources, disclaimer
+
+### POST
+POST https://japan-visa-renewal.vercel.app/api/check
+{"holder":"permanent","expiryDate":"2027-01-20","birthDate":"1985-06-02","today":"2026-11-08"}
+→ verdict "open", windowOpens "2026-10-20", fee null (free), nextCardValidity.validUntil "2036-06-02"
+
+Parameters: expiryDate (required), holder (fixed | permanent | hsp2), currentPeriodMonths (12 or "3y"), expectedGrantMonths, appliedDate, birthDate, cardIssueDate, method (counter | online), wantSpecialCard, today. Aliases accepted (永住者, 5年, オンライン…).
+
+Verdicts: too_early | open | urgent (≤14 days) | pending | special_period | expired.
+
+Bad input → 400 {error, docs, example, disclaimer}.
+
+### Other endpoints
+- GET https://japan-visa-renewal.vercel.app/api/rules
+- https://japan-visa-renewal.vercel.app/openapi.json
+- https://japan-visa-renewal.vercel.app/.well-known/ai-plugin.json
+- MCP: tool japan_visa_renewal_check on https://free-agent-tools.vercel.app/mcp
+
+## Official sources
+- https://www.moj.go.jp/isa/applications/procedures/16-3.html
+- https://www.moj.go.jp/isa/applications/procedures/tokureikikan_00001.html
+- https://www.moj.go.jp/isa/applications/procedures/nyuukokukanri10_00011.html
+- https://www.moj.go.jp/isa/tokutei.html
+- https://www.moj.go.jp/isa/applications/procedures/whatzairyu_00001.html
+- https://www.moj.go.jp/isa/01_00644.html
+- https://laws.e-gov.go.jp/law/326CO0000000319
+
+## Other free tools
+- https://japan-reentry-check.vercel.app — Japan Re-entry Deadline Check
+- https://japan-visa-fee.vercel.app — Japan Visa Fee Calculator
+- https://japan-pr-check.vercel.app — Japan PR Guideline Check
+- https://japan-job-loss.vercel.app — Japan Job Loss Check
+- https://japan-parttime-check.vercel.app — Japan Part-time Work Check
+- https://japan-hsp-points.vercel.app — Japan HSP Points Calculator
+- https://japan-mynumber-card-check.vercel.app — Japan My Number Card Check
+- https://japan-medical-cost-cap.vercel.app — Japan High-Cost Medical Expense Check
+- https://japan-leaving-tax.vercel.app — Japan Leaving Tax Check
+- https://free-agent-tools.vercel.app — Free Agent Tools MCP
