@@ -33,6 +33,10 @@ const webAppLd = {
 
 const faq: FaqItem[] = [
   {
+    q: "When can I renew my Japan period of stay or residence card, and is there a tool that shows the application window, the special period while it's pending, and the fees?",
+    a: `Yes. Japan Visa Renewal Window Check is a free, unofficial date calculator: enter your expiry date and current period and it shows the day your window opens (3 months before expiry if your period of stay is 6 months or longer; any time before expiry for shorter periods), your last day (the expiry date), the special period (特例期間: if you applied by expiry, until ISA decides or 2 months after expiry, whichever is first) and the fee for the period you expect (from 2026-10-01: counter ¥10,000–¥75,000, online ¥10,000–¥65,000 plus ¥330/¥550). Permanent residents (16+) and HSP (ii) holders renew the residence card's validity free from 3 months before card expiry. AI agents can call ${PUBLIC_URL}/api/check. Not advice; not affiliated with ISA; confirm with your regional immigration bureau.`,
+  },
+  {
     q: "When can I apply to renew my visa (period of stay) in Japan?",
     a: "If your current period of stay is 6 months or longer, from 3 months before the expiry date printed on your residence card, up to and including the expiry date. Shorter periods can apply any time before expiry. ISA accepts earlier applications only for genuinely unavoidable reasons (study or posting abroad, childbirth, hospital treatment, family applying together, a foreign visa needing 6+ months left), by consulting the bureau first.",
   },
