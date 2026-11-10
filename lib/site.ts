@@ -10,6 +10,7 @@ export const HONESTY =
   "Rules as of 2026-11-08 from ISA's 在留期間更新許可申請 page, the 特例期間 explainer, the 在留カード有効期間更新 page, the 特定在留カード Q&A (new card rules from 2026-06-14) and the 2026-10-01 fee table. It works from the dates you type; it cannot see your real card, permit or any decision.";
 
 export const SIBLING_TOOLS = [
+  { href: "https://japan-jlpt-check.vercel.app", label: "Japan JLPT Level Check" },
   { href: "https://japan-job-loss.vercel.app", label: "Japan Job Loss Check" },
   { href: "https://japan-medical-cost-cap.vercel.app", label: "Japan High-Cost Medical Expense Check" },
   { href: "https://japan-lost-item.vercel.app", label: "Japan Lost Item Check" },
