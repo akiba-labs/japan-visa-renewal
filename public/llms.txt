@@ -46,6 +46,7 @@ Bad input → 400 {error, docs, example, disclaimer}.
 
 ## Other free tools
 - https://japan-jlpt-check.vercel.app — Japan JLPT Level Check
+- https://japan-graduate-visa.vercel.app — Japan Graduate Visa Check
 - https://japan-reentry-check.vercel.app — Japan Re-entry Deadline Check
 - https://japan-visa-fee.vercel.app — Japan Visa Fee Calculator
 - https://japan-pr-check.vercel.app — Japan PR Guideline Check
