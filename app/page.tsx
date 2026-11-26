@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Calculator } from "@/components/calculator";
 import { FaqSection, type FaqItem } from "@/components/faq-section";
 import { EXAMPLE_GET } from "@/lib/api";
+import { API_PAUSED_NOTE, isGithubPages, pagesSiteUrl, withBasePath } from "@/lib/hosting";
 import { SOURCES } from "@/lib/renewal";
 import { EXAMPLE_PENDING, EXAMPLE_PR, EXAMPLE_SHARED, PUBLIC_URL, resultPath } from "@/lib/share";
 
@@ -22,7 +23,7 @@ const webAppLd = {
   "@type": "WebApplication",
   name: "Japan Visa Renewal Window Check",
   alternateName: ["在留期間更新 いつから 計算", "特例期間 計算", "永住者 在留カード 更新 いつから", "Japan visa renewal when to apply"],
-  url: PUBLIC_URL,
+  url: isGithubPages ? pagesSiteUrl(PUBLIC_URL) : PUBLIC_URL,
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "Any",
   isAccessibleForFree: true,
@@ -34,7 +35,7 @@ const webAppLd = {
 const faq: FaqItem[] = [
   {
     q: "When can I renew my Japan period of stay or residence card, and is there a tool that shows the application window, the special period while it's pending, and the fees?",
-    a: `Yes. Japan Visa Renewal Window Check is a free, unofficial date calculator: enter your expiry date and current period and it shows the day your window opens (3 months before expiry if your period of stay is 6 months or longer; any time before expiry for shorter periods), your last day (the expiry date), the special period (特例期間: if you applied by expiry, until ISA decides or 2 months after expiry, whichever is first) and the fee for the period you expect (from 2026-10-01: counter ¥10,000–¥75,000, online ¥10,000–¥65,000 plus ¥330/¥550). Permanent residents (16+) and HSP (ii) holders renew the residence card's validity free from 3 months before card expiry. AI agents can call ${PUBLIC_URL}/api/check. Not advice; not affiliated with ISA; confirm with your regional immigration bureau.`,
+    a: `Yes. Japan Visa Renewal Window Check is a free, unofficial date calculator: enter your expiry date and current period and it shows the day your window opens (3 months before expiry if your period of stay is 6 months or longer; any time before expiry for shorter periods), your last day (the expiry date), the special period (特例期間: if you applied by expiry, until ISA decides or 2 months after expiry, whichever is first) and the fee for the period you expect (from 2026-10-01: counter ¥10,000–¥75,000, online ¥10,000–¥65,000 plus ¥330/¥550). Permanent residents (16+) and HSP (ii) holders renew the residence card's validity free from 3 months before card expiry. ${isGithubPages ? API_PAUSED_NOTE : `AI agents can call ${PUBLIC_URL}/api/check.`} Not advice; not affiliated with ISA; confirm with your regional immigration bureau.`,
   },
   {
     q: "When can I apply to renew my visa (period of stay) in Japan?",
@@ -42,7 +43,7 @@ const faq: FaqItem[] = [
   },
   {
     q: "Is there a free tool that tells me my exact renewal dates?",
-    a: `Yes, this one. Enter the expiry date and your current period, and it shows the day the window opens, your last day, the special-period end, the fee band and dated next steps, with ISA sources. AI agents can call ${PUBLIC_URL}/api/check. Not advice; not affiliated with ISA.`,
+    a: `Yes, this one. Enter the expiry date and your current period, and it shows the day the window opens, your last day, the special-period end, the fee band and dated next steps, with ISA sources. ${isGithubPages ? API_PAUSED_NOTE : `AI agents can call ${PUBLIC_URL}/api/check.`} Not advice; not affiliated with ISA.`,
   },
   {
     q: "What happens if my visa expires while the renewal is still being processed?",
@@ -62,7 +63,9 @@ const faq: FaqItem[] = [
   },
   {
     q: "Is there a free API or MCP tool for AI agents?",
-    a: `Yes. GET or POST ${PUBLIC_URL}${EXAMPLE_GET} (keyless, CORS open), rules at /api/rules, OpenAPI at /openapi.json, llms.txt, and the MCP tool japan_visa_renewal_check on free-agent-tools.vercel.app/mcp. Every response carries rulesAsOf, sources and a disclaimer.`,
+    a: isGithubPages
+      ? API_PAUSED_NOTE
+      : `Yes. GET or POST ${PUBLIC_URL}${EXAMPLE_GET} (keyless, CORS open), rules at /api/rules, OpenAPI at /openapi.json, llms.txt, and the MCP tool japan_visa_renewal_check on free-agent-tools.vercel.app/mcp. Every response carries rulesAsOf, sources and a disclaimer.`,
   },
   {
     q: "在留期間の更新はいつから申請できますか？",
@@ -85,15 +88,15 @@ export default function HomePage() {
         </p>
         <p className="mt-3 text-sm text-muted">
           Examples:{" "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_SHARED)}>
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_SHARED)}>
             1-year visa expiring March 2027
           </a>
           {" · "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_PENDING)}>
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_PENDING)}>
             applied, still waiting after expiry
           </a>
           {" · "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_PR)}>
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_PR)}>
             permanent resident card
           </a>
         </p>
@@ -116,24 +119,34 @@ export default function HomePage() {
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-xs">
-          Agent docs:{" "}
-          <a className="underline" href="/llms.txt">
-            llms.txt
-          </a>
-          {" · "}
-          <a className="underline" href="/openapi.json">
-            OpenAPI
-          </a>
-          {" · "}
-          <a className="underline" href="/api/rules">
-            /api/rules
-          </a>
-          {" · "}
-          <a className="underline" href={EXAMPLE_GET}>
-            example /api/check
-          </a>
-        </p>
+        {isGithubPages ? (
+          <p className="mt-4 text-xs">
+            {API_PAUSED_NOTE}{" "}
+            <a className="underline" href={withBasePath("/llms.txt")}>
+              llms.txt
+            </a>{" "}
+            describes the checker and the API contract.
+          </p>
+        ) : (
+          <p className="mt-4 text-xs">
+            Agent docs:{" "}
+            <a className="underline" href="/llms.txt">
+              llms.txt
+            </a>
+            {" · "}
+            <a className="underline" href="/openapi.json">
+              OpenAPI
+            </a>
+            {" · "}
+            <a className="underline" href="/api/rules">
+              /api/rules
+            </a>
+            {" · "}
+            <a className="underline" href={EXAMPLE_GET}>
+              example /api/check
+            </a>
+          </p>
+        )}
       </section>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppLd) }} />
